@@ -117,10 +117,16 @@ static partial class P {
         }
         if (selected==null) throw new IOException("NX snapshot has no matching native content meta");
         var wanted=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var entry in selected.ContentEntries) wanted.Add(Convert.ToHexString(entry.NcaId));
+        // A patch's meta also lists the delta fragments that update an older version in place; installed
+        // content and cartridge dumps do not carry them, and nothing reads them here.
+        int required=0;
+        foreach (var entry in selected.ContentEntries) {
+            if (entry.Type==LibHac.Ncm.ContentType.DeltaFragment) continue;
+            wanted.Add(Convert.ToHexString(entry.NcaId)); required++;
+        }
         var kept=new List<Nca>();
         for (int i=0;i<all.Count;i++) if (wanted.Contains(ids[i])) kept.Add(all[i]);
-        if (kept.Count!=selected.ContentEntries.Length) throw new IOException("NX snapshot is missing native content records");
+        if (kept.Count!=required) throw new IOException("NX snapshot is missing native content records");
         return (kept,selected);
     }
     static int NxTree(string[] args) {

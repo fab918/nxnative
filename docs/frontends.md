@@ -13,6 +13,14 @@ A graphical app that packs games, keeps a library of them or starts them is a pr
 
 `scripts/build_ipa_from_nsp.py <NSP folder>` builds one game: an IPA by default, a Mac app with `--platform mac-app`, at the path `-o` names. Its options are in [The packing script in detail](development.md#the-packing-script-in-detail) and `--help`.
 
+The input also accepts one `.nx` file or a folder containing one, without keys.
+NX archives may hold materialized trees or native decrypted NCAs, for Switch 1
+and Switch 2. Keep `.nx` in the file-picker filters; use `--title-id` to select
+an application in a multi-application archive and `--package v<N>` for a stored
+version. The first NX read compiles a cached C++17 helper using the existing
+compiler and Zstandard installation. Native reads use the committed
+`nx_extract` executable. No NXConvert installation is required.
+
 With `--progress json` it asks nothing and writes one JSON object per line on stdout. Every object has `ev` (the event) and `t` (Unix time, seconds):
 
 | `ev` | Fields | When |

@@ -1,11 +1,11 @@
 # nxformat reader
 
 From https://github.com/fab918/nxformat, revision
-`d40e62d978ee2cd1a1261415f59b5aa5302ccfe6` (1.0.2), `dist/`.
+`8edddb86a98a879a2abc26778b16126f141de265` (1.0.4 with the reader pointer fix of #19), `dist/`.
 MIT; see LICENSE and the reader header's notice.
 
-Only the C++17 archive reader and its pinned, positional disk source are
-included. There is no writer, converter, Rust runtime or C API dependency.
+Only the C++17 archive reader, its pinned, positional disk source and the
+mapped views that source includes are included (reads stay positional). There is no writer, converter, Rust runtime or C API dependency.
 `dm/tools/nx_reader.cpp` links the reader to Zstandard and supplies a bounded
 read-only pipe protocol for `scripts/pack_nx.py` and the existing native NCA
 reader. Blocks retain the upstream integrity checks and cache policy.
